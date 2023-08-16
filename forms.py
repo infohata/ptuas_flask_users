@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, BooleanField, StringField, PasswordField
+from wtforms import SubmitField, BooleanField, StringField, PasswordField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError, EqualTo
 import app
 
@@ -23,8 +23,18 @@ class RegistracijosForma(FlaskForm):
         with app.app.app_context():
             vartotojas = app.Vartotojas.query.filter_by(
                 el_pastas=el_pastas.data).first()
-            print(vartotojas)
             if vartotojas:
                 raise ValidationError(
                     'Šis vardas panaudotas. Pasirinkite kitą.')
 
+
+class PrisijungimoForma(FlaskForm):
+    el_pastas = StringField('El. paštas', [DataRequired()])
+    slaptazodis = PasswordField('Slaptažodis', [DataRequired()])
+    prisiminti = BooleanField("Prisiminti mane")
+    submit = SubmitField('Prisijungti')
+
+
+class IrasasForm(FlaskForm):
+    irasas = TextAreaField('Įrašas', [DataRequired()])
+    submit = SubmitField('Pridėti įrašą')

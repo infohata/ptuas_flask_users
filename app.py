@@ -69,6 +69,31 @@ def registruotis():
         return redirect(url_for('index'))
     return render_template('registruotis.html', title='Register', form=form)
 
+@app.route("/prisijungti", methods=['GET', 'POST'])
+def prisijungti():
+    if current_user.is_authenticated:
+        flash('Jūs vis dar esate prisijungęs', 'warning')
+        return redirect(url_for('index'))
+    form = forms.PrisijungimoForma()
+    if form.validate_on_submit():
+        user = Vartotojas.query.filter_by(
+            el_pastas=form.el_pastas.data
+        ).first()
+        if user and bcrypt.check_password_hash(user.slaptazodis, form.slaptazodis.data):
+            login_user(user, remember=form.prisiminti.data)
+            # next_page = request.args.get('next')
+            # return redirect(next_page) if next_page else redirect(url_for('index'))
+            flash(f'Sveiki {user.vardas} sėkmingai prisijungę!', 'success')
+            return redirect(url_for('index'))
+        else:
+            flash('Prisijungti nepavyko. Patikrinkite el. paštą ir slaptažodį', 'danger')
+    return render_template('prisijungti.html', title='Prisijungti', form=form)
+
+@app.route("/atsijungti")
+def atsijungti():
+    logout_user()
+    flash('Viso gero!', 'secondary')
+    return redirect(url_for('index'))
 
 if __name__ == "__main__":
     app.run()
