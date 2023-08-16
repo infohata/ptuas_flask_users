@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Čia yra Jūsų, {{ current_user.vardas}}, įrašai</h1>
+
+{% if visi_irasai %}
+    {% for irasas in visi_irasai %}
+        <hr>
+        <p>Įrašas: {{irasas.irasas}}</p>
+        <p>Paskelbimo data: {{ datetime.strftime(irasas.data, "%Y-%m-%d %H:%M:%S")}}</p>
+    {% endfor %}
+{% else %}
+    <p>Kolkas jokių įrašų nėra</p>
+{% endif %}
+
+{% endblock %}

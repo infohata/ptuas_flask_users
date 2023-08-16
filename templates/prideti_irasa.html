@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content-section">
+<form method="post" action="">
+    {{ form.hidden_tag() }}
+    <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Kurybos laisvė</legend>
+        <div class="form-group">
+            {{ form.irasas.label(class="form-control-label") }}
+            {{ form.irasas(class="form-control") }}
+        </div>
+    </fieldset>
+    <div class="form-group">
+        {{ form.submit }}
+    </div>
+</form>
+</div>
+{% endblock %}

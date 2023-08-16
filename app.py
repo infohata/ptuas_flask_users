@@ -5,7 +5,7 @@ from flask_login import LoginManager, current_user, logout_user, login_user, Use
 
 import forms
 from flask_bcrypt import Bcrypt
-import datetime
+from datetime import datetime
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
@@ -94,6 +94,24 @@ def atsijungti():
     logout_user()
     flash('Viso gero!', 'secondary')
     return redirect(url_for('index'))
+
+@app.route("/irasai")
+@login_required
+def records():
+    visi_irasai = Irasas.query.filter_by(vartotojas_id=current_user.id).order_by(
+        Irasas.data.desc()).all()
+    return render_template("irasai.html", visi_irasai=visi_irasai, datetime=datetime)
+
+@app.route("/naujas_irasas", methods=["GET", "POST"])
+def new_record():
+    form = forms.IrasasForm()
+    if form.validate_on_submit():
+        naujas_irasas = Irasas(irasas=form.irasas.data, vartotojas_id=current_user.id, data=datetime.now())
+        db.session.add(naujas_irasas)
+        db.session.commit()
+        flash(f"Įrašas sukurtas", 'success')
+        return redirect(url_for('records'))
+    return render_template("prideti_irasa.html", form=form)
 
 if __name__ == "__main__":
     app.run()
