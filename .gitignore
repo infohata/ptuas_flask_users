@@ -1,2 +1,8 @@
 *.pyc
 venv/
+*.db
+static/profilio_nuotraukos/*.jpg
+static/profilio_nuotraukos/*.png
+static/profilio_nuotraukos/*.JPG
+static/profilio_nuotraukos/*.PNG
+!static/profilio_nuotraukos/default.png

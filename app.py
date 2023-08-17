@@ -7,6 +7,8 @@ from PIL import Image
 import forms
 from flask_bcrypt import Bcrypt
 from datetime import datetime
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
@@ -34,7 +36,7 @@ class Irasas(db.Model):
     __tablename__ = "irasas"
     id = db.Column(db.Integer, primary_key=True)
     data = db.Column("Data", db.DateTime)
-    irasas = db.Column("irasas", db.Integer)
+    irasas = db.Column("irasas", db.Text)
     vartotojas_id = db.Column(db.Integer, db.ForeignKey("vartotojas.id"))
     vartotojas = db.relationship("Vartotojas", backref="irasai")
 
@@ -45,6 +47,14 @@ with app.app_context():
 @login_manager.user_loader
 def load_user(vartotojo_id):
     return Vartotojas.query.get(int(vartotojo_id))
+
+class UserModelView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.el_pastas == "kestas@midonow.fi"
+
+admin = Admin(app)
+admin.add_view(UserModelView(Irasas, db.session))
+admin.add_view(UserModelView(Vartotojas, db.session))
 
 @app.route("/")
 def index():
