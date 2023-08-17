@@ -56,7 +56,7 @@ class UserModelView(ModelView):
         return current_user.is_authenticated and current_user.el_pastas == "kestas@midonow.fi"
     
 class IrasasAdminView(UserModelView):
-    column_filters = ['vartotojas']
+    column_filters = ['vartotojas_id']
     form_ajax_refs = {
         'vartotojas': {
             'fields': ['vardas', 'el_pastas'],
