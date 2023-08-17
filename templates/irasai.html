@@ -10,6 +10,17 @@
         <p>Įrašas: {{irasas.irasas}}</p>
         <p>Paskelbimo data: {{ datetime.strftime(irasas.data, "%Y-%m-%d %H:%M:%S")}}</p>
     {% endfor %}
+    {% for page_num in visi_irasai.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if visi_irasai.page == page_num %}
+                <a class="btn btn-primary mb-4" href="{{ url_for('records', page=page_num) }}">{{ page_num }}</a>
+            {% else %}
+                <a class="btn btn-outline-primary mb-4" href="{{ url_for('records', page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
 {% else %}
     <p>Kolkas jokių įrašų nėra</p>
 {% endif %}

@@ -143,8 +143,9 @@ def atsijungti():
 @app.route("/irasai")
 @login_required
 def records():
+    page = request.args.get('page', 1, type=int)
     visi_irasai = Irasas.query.filter_by(vartotojas_id=current_user.id).order_by(
-        Irasas.data.desc()).all()
+        Irasas.data.desc()).paginate(page=page, per_page=3)
     return render_template("irasai.html", visi_irasai=visi_irasai, datetime=datetime)
 
 @app.route("/naujas_irasas", methods=["GET", "POST"])
