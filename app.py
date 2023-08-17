@@ -31,6 +31,9 @@ class Vartotojas(db.Model, UserMixin):
     slaptazodis = db.Column("Slaptažodis", db.String(60), nullable=False)
     nuotrauka = db.Column("Nuotrauka", db.String(200), nullable=False, default='default.png')
 
+    def __repr__(self):
+        return str(self.vardas)
+
 
 class Irasas(db.Model):
     __tablename__ = "irasas"
@@ -51,9 +54,18 @@ def load_user(vartotojo_id):
 class UserModelView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.el_pastas == "kestas@midonow.fi"
+    
+class IrasasAdminView(UserModelView):
+    column_filters = ['vartotojas']
+    form_ajax_refs = {
+        'vartotojas': {
+            'fields': ['vardas', 'el_pastas'],
+            'page_size': 10
+        }
+    }
 
 admin = Admin(app)
-admin.add_view(UserModelView(Irasas, db.session))
+admin.add_view(IrasasAdminView(Irasas, db.session))
 admin.add_view(UserModelView(Vartotojas, db.session))
 
 @app.route("/")
