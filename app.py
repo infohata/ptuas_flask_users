@@ -171,5 +171,6 @@ def new_record():
         return redirect(url_for('records'))
     return render_template("prideti_irasa.html", form=form)
 
+# used if running app directly through python
 if __name__ == "__main__":
     app.run()
